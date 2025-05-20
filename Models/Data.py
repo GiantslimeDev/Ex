@@ -107,7 +107,6 @@ class Data:
 
     @classmethod
     def _PolyModel(cls, degree: int):
-        print(f"In POLY{degree}")
         cls._model = LinearRegression()
 
         X = cls._dataFrame[cls._dataX]
