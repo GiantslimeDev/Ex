@@ -76,7 +76,7 @@ class Data:
             cls._PolyModel(3)
         elif model_name == "Poly5":
             cls._PolyModel(5)
-        elif model_name == "Multi":
+        elif model_name == "Mult":
             cls._MultiModel()
         else:
             print(f"Critical error when initializing model: {model_name}")
@@ -149,7 +149,7 @@ class Data:
         cls._model.fit(cls._X_train, cls._Y_train)
         cls._Y_pred = cls._model.predict(cls._X_test)
 
-        cls.model_type = "Multi"
+        cls.model_type = "Mult"
 
     @classmethod
     def makeDataPointKNN(cls, f_name, s_name, f_val, s_val):

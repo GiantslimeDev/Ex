@@ -96,7 +96,7 @@ class ModelSelectionTab(QtWidgets.QWidget):
                 Data.initModel("Poly5")
                 self._Delegate()
             elif text == "Линейная множественная регрессия":
-                Data.initModel("Multi")
+                Data.initModel("Mult")
                 self._Delegate()
         else:
             return

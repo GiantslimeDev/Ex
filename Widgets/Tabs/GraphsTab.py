@@ -24,13 +24,13 @@ class GraphsTab(QtWidgets.QWidget):
         self.second_var_input = QtWidgets.QLineEdit()
         self.second_var_input.setFixedHeight(25)
 
-        draw_button = QtWidgets.QPushButton("Draw")
-        draw_button.setFixedHeight(25)
-        draw_button.clicked.connect(self.onDrawButtonClicked)
+        self.draw_button = QtWidgets.QPushButton("Draw")
+        self.draw_button.setFixedHeight(25)
+        self.draw_button.clicked.connect(self.onDrawButtonClicked)
 
         top_bar.addWidget(self.first_var_selection)
         top_bar.addWidget(self.second_var_selection)
-        top_bar.addWidget(draw_button)
+        top_bar.addWidget(self.draw_button)
 
         bottom_bar.addWidget(self.first_var_input)
         bottom_bar.addWidget(self.second_var_input)
@@ -50,11 +50,20 @@ class GraphsTab(QtWidgets.QWidget):
             for val in x:
                 self.first_var_selection.addItem(val)
                 self.second_var_selection.addItem(val)
-        if m_type == "Lin" or m_type == "Poly3" or m_type == "Poly5":
+        elif m_type == "Lin" or m_type == "Poly3" or m_type == "Poly5":
             self.second_var_input.setEnabled(False)
             self.second_var_selection.setEnabled(False)
             for val in x:
                 self.first_var_selection.addItem(val)
+        elif m_type == "Mult":
+            self.first_var_input.setVisible(False)
+            self.first_var_selection.setVisible(False)
+            self.second_var_input.setVisible(False)
+            self.second_var_selection.setVisible(False)
+            self.Graph.setVisible(False)
+
+            self.draw_button.setVisible(False)
+            self.layout().addWidget(QtWidgets.QLabel("Not Yet Implemented"))
 
     
     def onDrawButtonClicked(self):
@@ -82,6 +91,9 @@ class GraphsTab(QtWidgets.QWidget):
 
         fig = Figure()
         ax = fig.add_subplot()
+        #
+        # KNN -----------------------------------------------------------------------------------------------------------------
+        #
 
         if m_type == "KNN":
             ax.scatter(df[graph_x], df[graph_y], c=Data.encodeLabels(y))
@@ -91,6 +103,10 @@ class GraphsTab(QtWidgets.QWidget):
                 pred = Data.predict(point)
                 ax.scatter(p_x, p_y, marker='*', label=f'{y}: {pred[0]}')
                 ax.legend()
+
+        #
+        # Lin -----------------------------------------------------------------------------------------------------------------
+        #
 
         elif m_type == "Lin":
             ax.scatter(df[graph_x], df[y], c='lightblue')
@@ -111,6 +127,10 @@ class GraphsTab(QtWidgets.QWidget):
                 ax.legend()
 
             ax.legend()
+
+        #
+        # Pol -----------------------------------------------------------------------------------------------------------------
+        #
 
         elif m_type == "Poly3" or m_type == "Poly5":
             ax.scatter(df[graph_x], df[y], c='lightblue')
