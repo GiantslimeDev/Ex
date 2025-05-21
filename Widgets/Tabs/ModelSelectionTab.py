@@ -94,6 +94,8 @@ class ModelSelectionTab(QtWidgets.QWidget):
             elif text == "Одиночная полиномиальная регрессия степени: 5":
                 Data.initModel("Poly5")
                 self._Delegate()
-
+            else:
+                Data.initModel("Multi")
+                self._Delegate()
         else:
             return
