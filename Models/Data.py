@@ -148,32 +148,24 @@ class Data:
     @classmethod
     def getMetrics(cls):
         acc = 0
-        try:
-            acc = accuracy_score(cls._Y_test, cls._Y_pred)
-        except:
-            acc = "Эту метрику нельзя рассчитать для использованной модели"
-
         prec = 0
-        try:
-            prec = precision_score(cls._Y_test, cls._Y_pred)
-        except:
-            prec = "Эту метрику нельзя рассчитать для использованной модели"
-
         f1 = 0
-        try:
-            f1 = f1_score(cls._Y_test, cls._Y_pred)
-        except:
-            f1 = "Эту метрику нельзя рассчитать для использованной модели"
-
         rec = 0
-        try:
+        r2 = 0
+ 
+        if cls.model_type == "KNN":
+            r2 = "Эту метрику нельзя рассчитать для использованной модели"
+
+            acc = accuracy_score(cls._Y_test, cls._Y_pred)
+            prec = precision_score(cls._Y_test, cls._Y_pred)
+            f1 = f1_score(cls._Y_test, cls._Y_pred)
             rec = recall_score(cls._Y_test, cls._Y_pred)
-        except:
+        else:
+            acc = "Эту метрику нельзя рассчитать для использованной модели"
+            prec = "Эту метрику нельзя рассчитать для использованной модели"
+            f1 = "Эту метрику нельзя рассчитать для использованной модели"
             rec = "Эту метрику нельзя рассчитать для использованной модели"
 
-        r2 = 0
-        try:
             r2 = r2_score(cls._Y_test, cls._Y_pred)
-        except:
-            r2 = "Эту метрику нельзя рассчитать для использованной модели"
+    
         return acc, prec, f1, rec, r2
