@@ -72,7 +72,8 @@ class ModelSelectionTab(QtWidgets.QWidget):
             self.Classification.setEnabled(False)
             self.ClassificationModelSelection.setEnabled(False)
         else:
-            self.PredictionModelSelection.setVisible(False)
+            self.PredictionModelSelection.addItem("Линейная множественная регрессия")
+            self.PredictionModelSelection.setVisible(True)
 
     def onNextButtonClick(self):
         if self.Classification.isChecked():
@@ -94,7 +95,7 @@ class ModelSelectionTab(QtWidgets.QWidget):
             elif text == "Одиночная полиномиальная регрессия степени: 5":
                 Data.initModel("Poly5")
                 self._Delegate()
-            else:
+            elif text == "Линейная множественная регрессия":
                 Data.initModel("Multi")
                 self._Delegate()
         else:
