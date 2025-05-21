@@ -171,6 +171,8 @@ class Data:
         if cls.model_type == "KNN":
             x = cls._scaler.transform(x)
             return cls._model.predict(x)
+        elif cls.model_type == "Poly3" or cls.model_type == "Poly5":
+            return cls._model.predict(cls.poly_feat.transform(x))
         else:
             return cls._model.predict(x)
         

@@ -103,7 +103,15 @@ class GraphsTab(QtWidgets.QWidget):
             Y_line = Data.predict(X_line)
 
             ax.plot(X_line, Y_line, c='green', label=Data.getModelEquation())
+
+            if not p_x == None:
+                new = np.array([p_x]).reshape(-1, 1)
+                pred = Data.predict(new)
+                ax.scatter(p_x, pred, marker='*',c='red', label=f'Value for X = {p_x}: {pred[0]}')
+                ax.legend()
+
             ax.legend()
+
         elif m_type == "Poly3" or m_type == "Poly5":
             ax.scatter(df[graph_x], df[y], c='lightblue')
 
@@ -112,9 +120,16 @@ class GraphsTab(QtWidgets.QWidget):
             l_step = (l_max - l_min) / 100
 
             X_line = np.arange(l_min, l_max, l_step).reshape(-1, 1)
-            Y_line = Data.predict(Data.poly_feat.transform(X_line))
+            Y_line = Data.predict(X_line)
 
             ax.plot(X_line, Y_line, c='green', label=Data.getModelEquation())
+
+            if not p_x == None:
+                new = np.array([p_x]).reshape(-1, 1)
+                pred = Data.predict(new)
+                ax.scatter(p_x, pred, marker='*',c='red', label=f'Value for X = {p_x}: {pred[0]}')
+                ax.legend()
+
             ax.legend()
         
         self.Graph.setFigure(fig)
