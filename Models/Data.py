@@ -1,10 +1,11 @@
 import pandas
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score, r2_score
 from random import randint
+import numpy as np
 
 class Data:
     _dataFrame: pandas.DataFrame = pandas.DataFrame()
@@ -146,6 +147,36 @@ class Data:
         cls.model_type = "Multi"
 
     @classmethod
+    def makeDataPointKNN(cls, f_name, s_name, f_val, s_val):
+        X = cls._dataX
+        res = list()
+        for el in X:
+            if el == f_name:
+                res.append(f_val)
+            elif el == s_name:
+                res.append(s_val)
+            else:
+                #res.append(0)
+                res.append(cls._dataFrame[el].mean())
+        return res
+
+    
+    @classmethod
+    def predict(cls, x):
+        if cls.model_type == "KNN":
+            x = cls._scaler.transform(x)
+            return cls._model.predict(x)
+        else:
+            return cls._model.predict(x)
+
+    @classmethod
+    def encodeLabels(cls, column):
+        encoder = LabelEncoder()
+        Y = cls._dataFrame[column]
+        return encoder.fit_transform(Y)
+
+
+    @classmethod
     def getMetrics(cls):
         acc = 0
         prec = 0
@@ -157,9 +188,9 @@ class Data:
             r2 = "Эту метрику нельзя рассчитать для использованной модели"
 
             acc = accuracy_score(cls._Y_test, cls._Y_pred)
-            prec = precision_score(cls._Y_test, cls._Y_pred)
-            f1 = f1_score(cls._Y_test, cls._Y_pred)
-            rec = recall_score(cls._Y_test, cls._Y_pred)
+            prec = precision_score(cls._Y_test, cls._Y_pred, average='weighted')
+            f1 = f1_score(cls._Y_test, cls._Y_pred, average='weighted')
+            rec = recall_score(cls._Y_test, cls._Y_pred, average='weighted')
         else:
             acc = "Эту метрику нельзя рассчитать для использованной модели"
             prec = "Эту метрику нельзя рассчитать для использованной модели"

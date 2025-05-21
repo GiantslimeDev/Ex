@@ -105,6 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.Metrics.populate()
 
         self.tabs.setTabEnabled(7, True)
+        self.Graphs.populate()
 
     def style(self):
         self.setStyleSheet(
