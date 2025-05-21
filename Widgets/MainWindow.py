@@ -68,7 +68,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tabs.setTabEnabled(1, True)
             self.tabs.setTabEnabled(2, True)
 
-
     def onCorrConfirm(self):
         self.Select.populate()
         self.tabs.setTabEnabled(3, True)
@@ -104,6 +103,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def onModelSelection(self):
         self.tabs.setTabEnabled(6, True)
         self.Metrics.populate()
+
+        self.tabs.setTabEnabled(7, True)
 
     def style(self):
         self.setStyleSheet(
