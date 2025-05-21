@@ -29,6 +29,8 @@ class Data:
 
     is_empty: bool = True
 
+    poly_feat = None
+
 
     @classmethod
     def initDataFrame(cls, filePath: str, sep: str = ',') -> None:
@@ -122,15 +124,18 @@ class Data:
 
         cls._X_train, cls._X_test, cls._Y_train, cls._Y_test = train_test_split(X, Y, test_size=0.2, random_state=randint(0, 1000))
 
-        poly_feat = PolynomialFeatures(degree=degree)
-        cls._X_poly_train = poly_feat.fit_transform(cls._X_train)
-        cls._X_poly_test = poly_feat.transform(cls._X_test)
+        cls.poly_feat = PolynomialFeatures(degree=degree)
+        cls._X_poly_train = cls.poly_feat.fit_transform(cls._X_train)
+        cls._X_poly_test = cls.poly_feat.transform(cls._X_test)
 
         cls._model.fit(cls._X_poly_train, cls._Y_train)
 
         cls._Y_pred = cls._model.predict(cls._X_poly_test)
 
-        cls.model_type = "Poly"
+        if degree == 3:
+            cls.model_type = "Poly3"
+        elif degree == 5:
+            cls.model_type = "Poly5"
 
     @classmethod
     def _MultiModel(cls):
@@ -168,13 +173,25 @@ class Data:
             return cls._model.predict(x)
         else:
             return cls._model.predict(x)
+        
+    @classmethod
+    def getModelEquation(cls):
+        if cls.model_type == "Lin":
+            coef = cls._model.coef_[0]
+            return f"X * {coef:.5} + ({cls._model.intercept_:.5})"
+        elif cls.model_type == "Poly3":
+            coef = cls._model.coef_
+            return f"X^3 * {coef[3]:.5} + X^2 * {coef[2]:.5} + X * {coef[1]:.5} + ({cls._model.intercept_:.5})"
+        elif cls.model_type == "Poly5":
+            coef = cls._model.coef_
+            return f"X^5 * {coef[5]:.7} + X^4 * {coef[4]:.7} + X^3 * {coef[3]:.7} + X^2 * {coef[2]:.5} + X * {coef[1]:.5} + ({cls._model.intercept_:.5})"
+            
 
     @classmethod
     def encodeLabels(cls, column):
         encoder = LabelEncoder()
         Y = cls._dataFrame[column]
         return encoder.fit_transform(Y)
-
 
     @classmethod
     def getMetrics(cls):

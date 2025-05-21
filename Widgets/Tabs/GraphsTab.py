@@ -50,6 +50,12 @@ class GraphsTab(QtWidgets.QWidget):
             for val in x:
                 self.first_var_selection.addItem(val)
                 self.second_var_selection.addItem(val)
+        if m_type == "Lin" or m_type == "Poly3" or m_type == "Poly5":
+            self.second_var_input.setEnabled(False)
+            self.second_var_selection.setEnabled(False)
+            for val in x:
+                self.first_var_selection.addItem(val)
+
     
     def onDrawButtonClicked(self):
         p_x = None
@@ -74,7 +80,6 @@ class GraphsTab(QtWidgets.QWidget):
         x, y = Data.getMLVars()
         df = Data.getData()
 
-
         fig = Figure()
         ax = fig.add_subplot()
 
@@ -86,6 +91,31 @@ class GraphsTab(QtWidgets.QWidget):
                 pred = Data.predict(point)
                 ax.scatter(p_x, p_y, marker='*', label=f'{y}: {pred[0]}')
                 ax.legend()
+
+        elif m_type == "Lin":
+            ax.scatter(df[graph_x], df[y], c='lightblue')
+
+            l_min = float(df[x].min())
+            l_max = float(df[x].max())
+            l_step = (l_max - l_min) / 100
+
+            X_line = np.arange(l_min, l_max, l_step).reshape(-1, 1)
+            Y_line = Data.predict(X_line)
+
+            ax.plot(X_line, Y_line, c='green', label=Data.getModelEquation())
+            ax.legend()
+        elif m_type == "Poly3" or m_type == "Poly5":
+            ax.scatter(df[graph_x], df[y], c='lightblue')
+
+            l_min = float(df[x].min())
+            l_max = float(df[x].max())
+            l_step = (l_max - l_min) / 100
+
+            X_line = np.arange(l_min, l_max, l_step).reshape(-1, 1)
+            Y_line = Data.predict(Data.poly_feat.transform(X_line))
+
+            ax.plot(X_line, Y_line, c='green', label=Data.getModelEquation())
+            ax.legend()
         
         self.Graph.setFigure(fig)
 
